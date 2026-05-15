@@ -1,0 +1,2 @@
+1|Buy groceries|true
+3|Go for a walk|false

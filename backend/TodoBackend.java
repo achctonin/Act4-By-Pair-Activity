@@ -10,7 +10,6 @@ public class TodoBackend {
 
     private static final String FILE_PATH = "todos.txt";
 
-    // ── Inner model class ─────────────────────────────────────────────────
     public static class TodoItem {
         private int     id;
         private String  title;
@@ -29,14 +28,12 @@ public class TodoBackend {
         public void setTitle(String title)          { this.title     = title; }
         public void setCompleted(boolean completed) { this.completed = completed; }
 
-        // Serialize to one line: id|title|completed
         public String toFileLine() {
             return id + "|" + title + "|" + completed;
         }
 
-        // Deserialize from one line
         public static TodoItem fromFileLine(String line) {
-            String[] parts = line.split("\\|", 3);   // max 3 parts so title can contain "|"
+            String[] parts = line.split("\\|", 3);   
             if (parts.length < 3) return null;
             int     id        = Integer.parseInt(parts[0].trim());
             String  title     = parts[1].trim();
@@ -50,7 +47,6 @@ public class TodoBackend {
         }
     }
 
-    // ── LOAD all todos from text file ─────────────────────────────────────
     public List<TodoItem> loadTodos() {
         List<TodoItem> todos = new ArrayList<>();
         File file = new File(FILE_PATH);
@@ -72,7 +68,6 @@ public class TodoBackend {
         return todos;
     }
 
-    // ── SAVE full list back to text file ──────────────────────────────────
     public void saveTodos(List<TodoItem> todos) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (TodoItem item : todos) {
@@ -84,7 +79,6 @@ public class TodoBackend {
         }
     }
 
-    // ── ADD a new todo ────────────────────────────────────────────────────
     public TodoItem addTodo(String title) {
         List<TodoItem> todos = loadTodos();
         int newId = todos.stream().mapToInt(TodoItem::getId).max().orElse(0) + 1;
@@ -94,7 +88,6 @@ public class TodoBackend {
         return newItem;
     }
 
-    // ── DELETE a todo by ID ───────────────────────────────────────────────
     public boolean deleteTodo(int id) {
         List<TodoItem> todos = loadTodos();
         boolean removed = todos.removeIf(item -> item.getId() == id);
@@ -102,7 +95,6 @@ public class TodoBackend {
         return removed;
     }
 
-    // ── TOGGLE completion status ──────────────────────────────────────────
     public boolean toggleComplete(int id) {
         List<TodoItem> todos = loadTodos();
         for (TodoItem item : todos) {
@@ -115,7 +107,6 @@ public class TodoBackend {
         return false;
     }
 
-    // ── UPDATE title of a todo ────────────────────────────────────────────
     public boolean updateTitle(int id, String newTitle) {
         List<TodoItem> todos = loadTodos();
         for (TodoItem item : todos) {
@@ -128,7 +119,6 @@ public class TodoBackend {
         return false;
     }
 
-    // ── Quick manual test ─────────────────────────────────────────────────
     public static void main(String[] args) {
         TodoBackend backend = new TodoBackend();
 
